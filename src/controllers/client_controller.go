@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitRoutes(r *gin.Engine, clientService *services.ClientService) {
+func InitRoutes(r *gin.Engine, clientService services.ClientServiceInterface) {
 	r.POST("/v1/clients", func(c *gin.Context) {
 		var client models.Client
 		if err := c.ShouldBindJSON(&client); err != nil {
@@ -28,7 +28,7 @@ func InitRoutes(r *gin.Engine, clientService *services.ClientService) {
 	r.GET("/v1/clients", func(c *gin.Context) {
 		clients, err := clientService.GetClients()
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()}) // Certifique-se de retornar o erro
 			return
 		}
 		c.JSON(http.StatusOK, clients)
