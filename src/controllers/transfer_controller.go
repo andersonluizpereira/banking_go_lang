@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitTransferRoutes(r *gin.Engine, transferService *services.TransferService) {
+func InitTransferRoutes(r *gin.Engine, transferService services.TransferServiceInterface) {
 	r.POST("/v1/transfer", func(c *gin.Context) {
 		var transferRequest struct {
 			FromAccount string  `json:"from_account"`

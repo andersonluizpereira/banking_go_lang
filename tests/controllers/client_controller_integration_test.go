@@ -15,6 +15,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
+// Mock do ClientService para testes
 type MockClientService struct {
 	mock.Mock
 }
@@ -29,7 +30,7 @@ func (m *MockClientService) GetClients() ([]models.Client, error) {
 	return args.Get(0).([]models.Client), args.Error(1)
 }
 
-func setupRouter(mockService *MockClientService) *gin.Engine {
+func setupRouterClientIntegration(mockService *MockClientService) *gin.Engine {
 	gin.SetMode(gin.TestMode)
 	r := gin.Default()
 	controllers.InitRoutes(r, mockService)
@@ -38,7 +39,7 @@ func setupRouter(mockService *MockClientService) *gin.Engine {
 
 func TestCreateClient_Success(t *testing.T) {
 	mockService := new(MockClientService)
-	router := setupRouter(mockService)
+	router := setupRouterClientIntegration(mockService)
 
 	client := models.Client{Name: "John Doe", AccountNum: "123456", Balance: 1000.0}
 	mockService.On("CreateClient", &client).Return(nil)
@@ -63,7 +64,7 @@ func TestCreateClient_Success(t *testing.T) {
 
 func TestCreateClient_BadRequest(t *testing.T) {
 	mockService := new(MockClientService)
-	router := setupRouter(mockService)
+	router := setupRouterClientIntegration(mockService)
 
 	req, _ := http.NewRequest("POST", "/v1/clients", bytes.NewBuffer([]byte(`{invalid_json}`)))
 	req.Header.Set("Content-Type", "application/json")
@@ -82,7 +83,7 @@ func TestCreateClient_BadRequest(t *testing.T) {
 
 func TestGetClients_Success(t *testing.T) {
 	mockService := new(MockClientService)
-	router := setupRouter(mockService)
+	router := setupRouterClientIntegration(mockService)
 
 	clients := []models.Client{
 		{Name: "John Doe", AccountNum: "123456", Balance: 1000.0},
@@ -112,7 +113,7 @@ func TestGetClients_Success(t *testing.T) {
 
 func TestGetClients_InternalServerError(t *testing.T) {
 	mockService := new(MockClientService)
-	router := setupRouter(mockService)
+	router := setupRouterClientIntegration(mockService)
 
 	mockService.On("GetClients").Return(nil, assert.AnError)
 

@@ -8,12 +8,21 @@ import (
 	"sync"
 )
 
-// TransferService é o serviço que gerencia as transferências entre contas
+// TransferServiceInterface define os métodos do serviço de transferência
+type TransferServiceInterface interface {
+	TransferFunds(fromAccountNum, toAccountNum string, amount float64) error
+	GetTransferHistory(accountNum string) ([]models.Transfer, error)
+}
+
+// TransferService é a implementação concreta do TransferServiceInterface
 type TransferService struct {
 	clientRepo    repositories.ClientRepository
 	transferRepo  repositories.TransferRepository
 	transferMutex sync.Mutex
 }
+
+// Certifique-se de que TransferService implementa TransferServiceInterface
+var _ TransferServiceInterface = (*TransferService)(nil)
 
 // NewTransferService cria uma nova instância de TransferService
 func NewTransferService(clientRepo repositories.ClientRepository, transferRepo repositories.TransferRepository) *TransferService {
