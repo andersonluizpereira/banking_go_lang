@@ -11,7 +11,7 @@ import (
 
 func main() {
 	r := gin.Default()
-	db := database.InitDB("./bank.db")
+	db, _ := database.InitDB("./bank.db")
 
 	clientRepo := repositories.NewClientRepository(db)
 	clientService := services.NewClientService(clientRepo)
