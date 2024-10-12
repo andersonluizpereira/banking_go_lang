@@ -1,12 +1,12 @@
 version: '3.8'
 
 services:
-  app:
+  bankingapp:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    volumes:
-      - .:/app
-    command: ["./main"]
+    environment:
+      - DB_FILE=./bank.db
+    command: ["./bankingapp", "run"]
