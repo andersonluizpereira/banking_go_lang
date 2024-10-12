@@ -1,3 +1,4 @@
+// src/services/client_service.go
 package services
 
 import (
@@ -7,10 +8,10 @@ import (
 )
 
 type ClientService struct {
-	repo *repositories.ClientRepository
+	repo repositories.ClientRepository // Usando a interface aqui
 }
 
-func NewClientService(repo *repositories.ClientRepository) *ClientService {
+func NewClientService(repo repositories.ClientRepository) *ClientService {
 	return &ClientService{repo: repo}
 }
 
@@ -22,7 +23,7 @@ func (s *ClientService) CreateClient(client *models.Client) error {
 }
 
 func (s *ClientService) GetClients() ([]models.Client, error) {
-	return s.repo.GetClients(), nil
+	return s.repo.GetClients()
 }
 
 func (s *ClientService) GetClientByAccountNum(accountNum string) (*models.Client, error) {

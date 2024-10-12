@@ -14,10 +14,14 @@ func main() {
 	db := database.InitDB()
 
 	clientRepo := repositories.NewClientRepository(db)
+	clientService := services.NewClientService(clientRepo)
+
 	transferRepo := repositories.NewTransferRepository(db)
 
-	clientService := services.NewClientService(clientRepo)
-	transferService := services.NewTransferService(clientRepo, transferRepo)
+	transferService := services.NewTransferService(
+		clientRepo,
+		transferRepo,
+	)
 
 	controllers.InitRoutes(r, clientService)
 	controllers.InitTransferRoutes(r, transferService)

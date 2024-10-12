@@ -1,3 +1,4 @@
+// src/services/transfer_service.go
 package services
 
 import (
@@ -7,19 +8,22 @@ import (
 	"sync"
 )
 
+// TransferService é o serviço que gerencia as transferências entre contas
 type TransferService struct {
-	clientRepo    *repositories.ClientRepository
-	transferRepo  *repositories.TransferRepository
+	clientRepo    repositories.ClientRepository
+	transferRepo  repositories.TransferRepository
 	transferMutex sync.Mutex
 }
 
-func NewTransferService(clientRepo *repositories.ClientRepository, transferRepo *repositories.TransferRepository) *TransferService {
+// NewTransferService cria uma nova instância de TransferService
+func NewTransferService(clientRepo repositories.ClientRepository, transferRepo repositories.TransferRepository) *TransferService {
 	return &TransferService{
 		clientRepo:   clientRepo,
 		transferRepo: transferRepo,
 	}
 }
 
+// TransferFunds realiza uma transferência entre duas contas
 func (s *TransferService) TransferFunds(fromAccountNum, toAccountNum string, amount float64) error {
 	if amount <= 0 || amount > 10000 {
 		return errors.New("amount must be between 0 and 10,000")
@@ -64,6 +68,7 @@ func (s *TransferService) TransferFunds(fromAccountNum, toAccountNum string, amo
 	return s.transferRepo.CreateTransfer(&transfer)
 }
 
+// GetTransferHistory retorna o histórico de transferências de uma conta específica
 func (s *TransferService) GetTransferHistory(accountNum string) ([]models.Transfer, error) {
 	return s.transferRepo.GetTransfersByAccountNum(accountNum)
 }
