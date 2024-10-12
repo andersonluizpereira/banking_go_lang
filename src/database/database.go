@@ -2,15 +2,15 @@ package database
 
 import (
 	"database/sql"
-	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func InitDB() *sql.DB {
-	db, err := sql.Open("sqlite3", "./bank.db")
+// InitDB agora retorna um erro
+func InitDB(db_name string) (*sql.DB, error) {
+	db, err := sql.Open("sqlite3", db_name)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	return db
+	return db, nil
 }
