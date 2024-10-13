@@ -114,3 +114,75 @@ Exemplo de anotação:
 // @Failure 400 {object} map[string]interface{} "Mensagem de erro"
 // @Router /v1/clients [post]
 ```
+
+# Comandos Úteis
+## Geração da documentação Swagger:
+
+```bash
+    swag init -g src/main.go
+```
+
+# Remover a documentação:
+```bash
+rm -rf docs
+```
+
+# Estrutura do Projeto
+## O projeto está organizado da seguinte forma:
+```
+banking/
+├── go.mod
+├── go.sum
+└── src/
+    ├── main.go                  # Ponto de entrada da aplicação
+    ├── controllers/             # Controladores de rota
+    │   ├── client_controller.go # Controller de Clientes
+    │   ├── transfer_controller.go # Controller de Transferências
+    │   └── routes.go            # Iniciação de Rotas
+    ├── database/
+    │   └── database.go          # Inicialização do banco de dados SQLite
+    ├── models/                  # Definições de Modelos (Client, Transfer)
+    ├── repositories/            # Repositórios de Acesso ao Banco
+    └── services/                # Serviços de Lógica de Negócio
+```
+
+# Exemplo de Uso
+## Criar um Cliente:
+
+```bash
+curl -X POST http://localhost:8080/v1/clients \
+-H "Content-Type: application/json" \
+-d '{
+      "name": "John Doe",
+      "account_num": "123456",
+      "balance": 1000.0
+    }'
+```
+
+## Listar Clientes:
+```bash
+curl -X GET http://localhost:8080/v1/clients
+```
+
+
+## Buscar um Cliente:
+```bash
+curl -X GET http://localhost:8080/v1/clients/123456
+```
+
+## Realizar uma Transferência:
+```bash
+curl -X POST http://localhost:8080/v1/transfer \
+-H "Content-Type: application/json" \
+-d '{
+      "from_account": "123456",
+      "to_account": "654321",
+      "amount": 100.0
+    }'
+```
+
+## Consultar Histórico de Transferências:
+```bash
+curl -X GET http://localhost:8080/v1/transfers/123456
+```
+
