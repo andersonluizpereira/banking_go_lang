@@ -1,0 +1,8 @@
+### Explicação do `README.md`
+
+- **Instalação e Configuração**: Inclui passos para configurar o projeto e gerar a documentação.
+- **Executando a Aplicação**: Mostra como rodar localmente e com Docker.
+- **Endpoints da API**: Descreve os endpoints disponíveis.
+- **Documentação Swagger**: Orienta sobre como acessar e visualizar a documentação gerada.
+- **Estrutura do Projeto**: Fornece uma visão geral da organização de diretórios.
+- **Exemplo de Uso**: Comandos `curl` para interagir com a API.
