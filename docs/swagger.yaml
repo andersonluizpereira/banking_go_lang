@@ -1,0 +1,86 @@
+definitions:
+  models.Client:
+    properties:
+      account_num:
+        type: string
+      balance:
+        type: number
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/clients:
+    get:
+      description: Retorna uma lista de todos os clientes cadastrados
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Client'
+            type: array
+        "500":
+          description: Mensagem de erro
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Lista todos os clientes
+      tags:
+      - clients
+    post:
+      consumes:
+      - application/json
+      description: Cria um novo cliente com as informações fornecidas
+      parameters:
+      - description: Cliente
+        in: body
+        name: client
+        required: true
+        schema:
+          $ref: '#/definitions/models.Client'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Client'
+        "400":
+          description: Mensagem de erro
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Cria um novo cliente
+      tags:
+      - clients
+  /v1/clients/{accountNum}:
+    get:
+      description: Busca um cliente pelo número da conta fornecido
+      parameters:
+      - description: Número da conta
+        in: path
+        name: accountNum
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Client'
+        "404":
+          description: client not found
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Busca cliente por número da conta
+      tags:
+      - clients
+swagger: "2.0"

@@ -8,6 +8,11 @@ import (
 	"fmt"
 	"os"
 
+	_ "banking/docs" // Importa a documentação gerada pelo Swag
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
 	"github.com/gin-gonic/gin"
 	"github.com/golang-migrate/migrate"
 	"github.com/spf13/cobra"
@@ -69,6 +74,8 @@ func runServer() {
 	controllers.InitRoutes(r, clientService)
 	controllers.InitTransferRoutes(r, transferService)
 
+	// Rota Swagger
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	fmt.Println("Running on localhost:8080")
 	r.Run(":8080")
 }
