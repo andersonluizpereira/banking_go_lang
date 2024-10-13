@@ -1,4 +1,16 @@
 definitions:
+  controllers.TransferRequest:
+    properties:
+      amount:
+        example: 100.5
+        type: number
+      from_account:
+        example: "123456"
+        type: string
+      to_account:
+        example: "654321"
+        type: string
+    type: object
   models.Client:
     properties:
       account_num:
@@ -8,6 +20,22 @@ definitions:
       id:
         type: integer
       name:
+        type: string
+    type: object
+  models.Transfer:
+    properties:
+      amount:
+        type: number
+      created_at:
+        type: string
+      from_account_num:
+        type: string
+      id:
+        type: integer
+      status:
+        description: '"success" ou "failed"'
+        type: string
+      to_account_num:
         type: string
     type: object
 info:
@@ -83,4 +111,58 @@ paths:
       summary: Busca cliente por número da conta
       tags:
       - clients
+  /v1/transfer:
+    post:
+      consumes:
+      - application/json
+      description: Realiza uma transferência entre duas contas fornecidas
+      parameters:
+      - description: Dados da Transferência
+        in: body
+        name: transferRequest
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.TransferRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Transferência realizada com sucesso
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Mensagem de erro
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Realiza uma transferência
+      tags:
+      - transfers
+  /v1/transfers/{accountNum}:
+    get:
+      description: Retorna o histórico de transferências associado a uma conta fornecida
+      parameters:
+      - description: Número da conta
+        in: path
+        name: accountNum
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Transfer'
+            type: array
+        "500":
+          description: Mensagem de erro
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Obtém histórico de transferências
+      tags:
+      - transfers
 swagger: "2.0"

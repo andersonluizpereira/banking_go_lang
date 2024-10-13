@@ -119,9 +119,107 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/v1/transfer": {
+            "post": {
+                "description": "Realiza uma transferência entre duas contas fornecidas",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transfers"
+                ],
+                "summary": "Realiza uma transferência",
+                "parameters": [
+                    {
+                        "description": "Dados da Transferência",
+                        "name": "transferRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.TransferRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Transferência realizada com sucesso",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Mensagem de erro",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/transfers/{accountNum}": {
+            "get": {
+                "description": "Retorna o histórico de transferências associado a uma conta fornecida",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "transfers"
+                ],
+                "summary": "Obtém histórico de transferências",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Número da conta",
+                        "name": "accountNum",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Transfer"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Mensagem de erro",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "controllers.TransferRequest": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number",
+                    "example": 100.5
+                },
+                "from_account": {
+                    "type": "string",
+                    "example": "123456"
+                },
+                "to_account": {
+                    "type": "string",
+                    "example": "654321"
+                }
+            }
+        },
         "models.Client": {
             "type": "object",
             "properties": {
@@ -135,6 +233,30 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Transfer": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "from_account_num": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "\"success\" ou \"failed\"",
+                    "type": "string"
+                },
+                "to_account_num": {
                     "type": "string"
                 }
             }
