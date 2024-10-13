@@ -11,6 +11,7 @@ import (
 type ClientServiceInterface interface {
 	CreateClient(client *models.Client) error
 	GetClients() ([]models.Client, error)
+	GetClientByAccountNum(accountNum string) (*models.Client, error)
 }
 
 // ClientService é a implementação concreta que atende a ClientServiceInterface

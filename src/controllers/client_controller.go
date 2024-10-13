@@ -33,4 +33,13 @@ func InitRoutes(r *gin.Engine, clientService services.ClientServiceInterface) {
 		}
 		c.JSON(http.StatusOK, clients)
 	})
+	r.GET("/v1/clients/:accountNum", func(c *gin.Context) {
+		accountNum := c.Param("accountNum")
+		client, err := clientService.GetClientByAccountNum(accountNum)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "client not found"})
+			return
+		}
+		c.JSON(http.StatusOK, client)
+	})
 }
