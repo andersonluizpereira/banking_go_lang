@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-migrate/migrate"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +29,21 @@ func main() {
 		},
 	}
 
+	var migrateCmd = &cobra.Command{
+		Use:   "migrate",
+		Short: "Run database migrations",
+		Long:  "Applies the latest database migrations",
+		Run: func(cmd *cobra.Command, args []string) {
+			if err := runMigrations("./bank.db"); err != nil {
+				fmt.Println("Failed to run migrations:", err)
+				os.Exit(1)
+			}
+			fmt.Println("Migrations applied successfully")
+		},
+	}
+
 	rootCmd.AddCommand(runCmd)
+	rootCmd.AddCommand(migrateCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -56,4 +71,18 @@ func runServer() {
 
 	fmt.Println("Running on localhost:8080")
 	r.Run(":8080")
+}
+
+func runMigrations(dbPath string) error {
+	m, err := migrate.New(
+		"file://migrations",
+		fmt.Sprintf("sqlite3://%s", dbPath),
+	)
+	if err != nil {
+		return err
+	}
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		return err
+	}
+	return nil
 }
