@@ -131,19 +131,123 @@ rm -rf docs
 ## O projeto está organizado da seguinte forma:
 ```
 banking/
+├── Dockerfile
+├── LICENSE
+├── docker-compose.yml
+├── docs
+│   ├── docs.go
+│   ├── swagger.json
+│   └── swagger.yaml
 ├── go.mod
 ├── go.sum
-└── src/
-    ├── main.go                  # Ponto de entrada da aplicação
-    ├── controllers/             # Controladores de rota
-    │   ├── client_controller.go # Controller de Clientes
-    │   ├── transfer_controller.go # Controller de Transferências
-    │   └── routes.go            # Iniciação de Rotas
-    ├── database/
-    │   └── database.go          # Inicialização do banco de dados SQLite
-    ├── models/                  # Definições de Modelos (Client, Transfer)
-    ├── repositories/            # Repositórios de Acesso ao Banco
-    └── services/                # Serviços de Lógica de Negócio
+├── readme.md
+├── src
+│   ├── bank.db
+│   ├── controllers
+│   │   ├── client_controller.go
+│   │   └── transfer_controller.go
+│   ├── database
+│   │   └── database.go
+│   ├── main.go
+│   ├── models
+│   │   ├── client.go
+│   │   └── transfer.go
+│   ├── repositories
+│   │   ├── client_repository.go
+│   │   └── transfer_repository.go
+│   └── services
+│       ├── client_service.go
+│       └── transfer_service.go
+└── tests
+    ├── controllers
+    │   ├── client_controller_integration_test.go
+    │   └── transfer_controller_integration_test.go
+    ├── database
+    │   └── database_integration_test.go
+    ├── models
+    │   ├── client_test.go
+    │   └── transfer_test.go
+    ├── repositories
+    │   ├── client_repository_integration_test.go
+    │   ├── test_helpers.go
+    │   └── transfer_repository_integration_test.go
+    └── services
+        ├── client_service_test.go
+        ├── mock_repositories.go
+        └── transfer_service_test.go
+               # Serviços de Lógica de Negócio
+```
+```
+Explicação da Estrutura de Diretórios
+Arquivos e Diretórios na Raiz
+Dockerfile: Arquivo para construir a imagem Docker da aplicação. Contém as instruções para configurar o ambiente necessário para rodar a API no contêiner.
+
+LICENSE: Arquivo de licença, onde são descritos os direitos de uso do projeto.
+
+bank.db: Arquivo de banco de dados SQLite. Este é o arquivo onde as tabelas e os dados da aplicação são armazenados. Pode ser recriado automaticamente ao iniciar o projeto.
+
+docker-compose.yml: Arquivo de configuração do Docker Compose, que permite orquestrar o contêiner da aplicação e quaisquer serviços adicionais (como banco de dados).
+
+docs: Diretório que contém os arquivos de documentação do Swagger.
+
+docs.go: Gerado automaticamente pelo swag e serve como entrada para a documentação Swagger.
+swagger.json e swagger.yaml: Arquivos de especificação OpenAPI para a API, em formatos JSON e YAML.
+go.mod e go.sum: Arquivos de configuração do módulo Go.
+
+go.mod: Especifica o módulo e suas dependências.
+go.sum: Contém hashes de verificação de integridade para as dependências do projeto.
+readme.md: Documentação principal do projeto. Geralmente contém instruções de instalação, execução e detalhes sobre a API.
+
+Diretório src
+Contém o código-fonte principal do projeto.
+
+src/bank.db: Backup ou versão inicial do banco de dados SQLite para configuração rápida.
+
+controllers: Diretório onde estão os controladores que definem os endpoints da API.
+
+client_controller.go: Controlador para endpoints relacionados a clientes.
+transfer_controller.go: Controlador para endpoints de transferência entre contas.
+database: Diretório para configuração e inicialização do banco de dados.
+
+database.go: Arquivo responsável por conectar-se ao SQLite, executar migrações e garantir que as tabelas estejam prontas para uso.
+main.go: Ponto de entrada da aplicação. Este arquivo inicializa o banco de dados, configura as rotas e inicia o servidor.
+
+models: Diretório com a definição dos modelos de dados.
+
+client.go: Define o modelo Client, representando a tabela de clientes.
+transfer.go: Define o modelo Transfer, representando a tabela de transferências.
+repositories: Diretório que contém os repositórios, que lidam com o acesso ao banco de dados.
+
+client_repository.go: Funções de acesso ao banco para operações relacionadas a clientes.
+transfer_repository.go: Funções de acesso ao banco para operações relacionadas a transferências.
+services: Diretório que contém a lógica de negócios da aplicação.
+
+client_service.go: Contém a lógica de negócios para operações relacionadas a clientes.
+transfer_service.go: Contém a lógica de negócios para operações de transferência.
+Diretório tests
+Contém testes unitários e de integração para todas as camadas da aplicação. Os testes estão organizados por funcionalidade, refletindo a estrutura do código principal.
+
+controllers: Contém testes de integração para os controladores da API.
+
+client_controller_integration_test.go: Testa endpoints relacionados a clientes.
+transfer_controller_integration_test.go: Testa endpoints de transferência.
+database: Contém testes de integração para o banco de dados.
+
+database_integration_test.go: Testes de integração para validar a inicialização e migração do banco de dados.
+models: Testes para os modelos de dados.
+
+client_test.go: Testes unitários para o modelo Client.
+transfer_test.go: Testes unitários para o modelo Transfer.
+repositories: Contém testes para as funções de acesso ao banco de dados.
+
+client_repository_integration_test.go: Testa as operações de banco de dados relacionadas a clientes.
+transfer_repository_integration_test.go: Testa as operações de banco de dados relacionadas a transferências.
+test_helpers.go: Funções auxiliares usadas nos testes dos repositórios, como criação de dados de teste.
+services: Contém os testes de unidade para os serviços da aplicação.
+
+client_service_test.go: Testa as regras de negócios para operações de clientes.
+transfer_service_test.go: Testa as regras de negócios para operações de transferência.
+mock_repositories.go: Mock dos repositórios, usado nos testes para simular comportamentos e evitar o acesso ao banco de dados real.
 ```
 
 # Exemplo de Uso
